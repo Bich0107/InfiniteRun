@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PropelPanel : ActivatableObject
 {
-    [SerializeField] Rotater rotater;
+    [SerializeField] Animator animator;
     [SerializeField] Vector2 propelDirection;
     [SerializeField] float propelForce;
 
@@ -22,6 +22,6 @@ public class PropelPanel : ActivatableObject
 
     public override void Activate()
     {
-        rotater.Rotate();
+        animator.SetTrigger("trigger");
     }
 }

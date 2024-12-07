@@ -10,7 +10,6 @@ public class MovingObject : MonoBehaviour
     [SerializeField] float baseSpeed;
     [SerializeField] float currentSpeed;
     [SerializeField] bool isMoving;
-    Vector2 velocity = new Vector2();
 
     void Start()
     {
@@ -22,9 +21,7 @@ public class MovingObject : MonoBehaviour
     {
         if (isMoving)
         {
-            velocity.x = (direction * currentSpeed).x;
-            velocity.y = rb.velocity.y;
-            rb.velocity = velocity;
+            rb.velocity = direction * currentSpeed;
         }
     }
 

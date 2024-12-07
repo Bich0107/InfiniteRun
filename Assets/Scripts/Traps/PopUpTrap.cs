@@ -14,17 +14,6 @@ public class PopUpTrap : ActivatableObject
         popDirection = transform.position.y > Mathf.Epsilon ? -1f : 1f;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (activated) return;
-
-        ITrapTrigger target = other.GetComponentInParent<ITrapTrigger>();
-        if (target != null)
-        {
-            Activate();
-        }
-    }
-
     public override void Activate()
     {
         activated = true;

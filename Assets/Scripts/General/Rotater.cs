@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rotater : MonoBehaviour
+public class Rotater : ActivatableObject
 {
     [SerializeField] Transform targetTrans;
     [SerializeField] float angle;
@@ -16,7 +16,7 @@ public class Rotater : MonoBehaviour
         baseRotation = targetTrans.localRotation;
     }
 
-    public void Rotate()
+    public override void Activate()
     {
         if (rotating) return;
 

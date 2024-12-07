@@ -5,17 +5,17 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] float gravityScale;
-    public float GravityScale
-    {
-        get { return gravityScale; }
-        set { gravityScale = value; }
-    }
+    [SerializeField] float baseGravityScale;
+    [SerializeField] float changeDirectionGravityScale;
+    [SerializeField] float changeGravityDelay;
+    WaitForSeconds changeGravityWait;
+    bool isBusy;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = gravityScale;
+        rb.gravityScale = baseGravityScale;
+        changeGravityWait = new WaitForSeconds(changeGravityDelay);
     }
 
     public void Propel(Vector2 _force)
@@ -23,20 +23,28 @@ public class PlayerMovement : MonoBehaviour
         rb.AddForce(_force, ForceMode2D.Impulse);
     }
 
-    IEnumerator CR_DisableGravity(float _duration)
-    {
-        float oldGravity = rb.gravityScale;
-        rb.gravityScale = 0f;
-        yield return new WaitForSeconds(_duration);
-        rb.gravityScale = oldGravity;
-    }
-
     public void ChangeGravity(float _direction)
     {
+        if (isBusy) return;
+        StartCoroutine(CR_ChangeGravity(_direction));
+    }
+
+    IEnumerator CR_ChangeGravity(float _direction)
+    {
+        isBusy = true;
+
         if (_direction > Mathf.Epsilon)
         {
-            rb.gravityScale = -gravityScale;
+            rb.gravityScale = -changeDirectionGravityScale;
+            yield return changeGravityWait;
+            rb.gravityScale = -baseGravityScale;
         }
-        else rb.gravityScale = gravityScale;
+        else
+        {
+            rb.gravityScale = changeDirectionGravityScale;
+            yield return changeGravityWait;
+            rb.gravityScale = baseGravityScale;
+        }
+        isBusy = false;
     }
 }
