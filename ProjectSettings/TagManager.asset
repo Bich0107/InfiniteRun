@@ -53,3 +53,9 @@ TagManager:
   - name: Player
     uniqueID: 3282347971
     locked: 0
+  - name: Equipment
+    uniqueID: 3888251941
+    locked: 0
+  - name: Projectile
+    uniqueID: 3558466553
+    locked: 0
