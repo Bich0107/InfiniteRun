@@ -32,12 +32,7 @@ public class AnimationSequence : MonoBehaviour
     public void Stop()
     {
         if (!isPlaying) return;
-
-        foreach (CustomAnimation frame in frames)
-        {
-            frame.Stop();
-        }
-
+        StopAllCoroutines();
         isPlaying = false;
     }
 }

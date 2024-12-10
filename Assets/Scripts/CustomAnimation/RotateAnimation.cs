@@ -16,7 +16,7 @@ public class RotateAnimation : CustomAnimation
         while (tick < duration)
         {
             tick += Time.deltaTime;
-            target.localRotation = Quaternion.Lerp(startValue, endValue, tick / duration);
+            target.localRotation = Quaternion.Slerp(startValue, endValue, tick / duration);
             yield return null;
         }
     }

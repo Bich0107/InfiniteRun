@@ -10,8 +10,4 @@ public abstract class CustomAnimation : MonoBehaviour
     protected float tick;
 
     public abstract IEnumerator Play();
-    public virtual void Stop()
-    {
-        StopAllCoroutines();
-    }
 }

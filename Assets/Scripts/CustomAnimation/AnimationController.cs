@@ -14,6 +14,8 @@ public class AnimationController : MonoBehaviour
 
     public void Play()
     {
+        if (sequences.Length == 0) return;
+
         foreach (AnimationSequence sequence in sequences)
         {
             sequence.Play();
@@ -22,6 +24,8 @@ public class AnimationController : MonoBehaviour
 
     public void Stop()
     {
+        if (sequences.Length == 0) return;
+
         foreach (AnimationSequence sequence in sequences)
         {
             sequence.Stop();
