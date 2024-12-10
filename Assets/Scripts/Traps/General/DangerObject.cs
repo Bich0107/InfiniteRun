@@ -7,7 +7,7 @@ public class DangerObject : CollideObject
     [SerializeField] float damage;
     bool isActive = true;
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter(Collider other)
     {
         if (isInCD || !isActive) return;
         ICollideWithEnemy target = other.GetComponentInParent<ICollideWithEnemy>();

@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody))]
 public class MovingObject : MonoBehaviour
 {
-    [SerializeField] Rigidbody2D rb;
-    [SerializeField] Vector2 direction;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] Vector3 direction;
     [SerializeField] float baseSpeed;
     [SerializeField] float currentSpeed;
     [SerializeField] bool isMoving;
 
-    void Start()
+    void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
         currentSpeed = baseSpeed;
     }
 
@@ -22,6 +22,10 @@ public class MovingObject : MonoBehaviour
         if (isMoving)
         {
             rb.velocity = direction * currentSpeed;
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
         }
     }
 

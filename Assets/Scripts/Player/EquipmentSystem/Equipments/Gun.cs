@@ -27,10 +27,8 @@ public class Gun : Equipment
     {
         if (!usable || currentAmmo <= 0) return;
 
-        // spawn bullet
         GameObject g = Instantiate(bullet, bulletSpawn.position, gunBodyTrans.localRotation);
-        g.GetComponent<Bullet>().Fire(transform.right);
-        //
+        g.GetComponent<Bullet>().Fire(gunBodyTrans.right);
         StartCoroutine(CR_RefreshCD());
 
         currentAmmo = Mathf.Max(currentAmmo - 1, 0);
