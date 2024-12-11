@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingObject : MonoBehaviour
+public enum MovingAxis
+{
+    Up, Right, Forward
+}
+
+public class SingleAxisMovingObject : MonoBehaviour
 {
     [SerializeField] Rigidbody rb;
-    [SerializeField] Vector3 direction;
+    [SerializeField] Transform trans;
+    [SerializeField] MovingAxis axis;
     [SerializeField] float baseSpeed;
     [SerializeField] float currentSpeed;
     [SerializeField] bool isMoving;
@@ -19,7 +25,18 @@ public class MovingObject : MonoBehaviour
     {
         if (isMoving)
         {
-            rb.velocity = direction * currentSpeed;
+            switch (axis)
+            {
+                case MovingAxis.Up:
+                    rb.velocity = trans.up * currentSpeed;
+                    break;
+                case MovingAxis.Right:
+                    rb.velocity = trans.right * currentSpeed;
+                    break;
+                case MovingAxis.Forward:
+                    rb.velocity = trans.forward * currentSpeed;
+                    break;
+            }
         }
         else
         {
@@ -28,7 +45,6 @@ public class MovingObject : MonoBehaviour
     }
 
     public void SetSpeed(float _value) => currentSpeed = _value;
-    public void SetDirection(Vector2 _direction) => direction = _direction;
     public void SetMoveStatus(bool _status) => isMoving = _status;
     public void Reset() => currentSpeed = baseSpeed;
 }
