@@ -2,17 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordFormation : MonoBehaviour
+public class SwordFormation : Equipment
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] FlyingSword[] swords;
+    [SerializeField] bool autoAttack = true;
+
+
+    public override void Use()
     {
-        
+        if (!isUsing)
+        {
+            isUsing = true;
+            foreach (FlyingSword sword in swords)
+            {
+                sword.AutoAttack = autoAttack;
+                sword.ChangeState(FlyingSwordState.FindTarget);
+            }
+        }
+        else Stop();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Stop()
     {
-        
+        foreach (FlyingSword sword in swords) sword.Stop();
+        isUsing = false;
     }
 }

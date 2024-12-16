@@ -66,7 +66,6 @@ public class RotateToTarget : MonoBehaviour
         Quaternion endValue = startValue * _rotation;
         while (tick < randomAngleDuration)
         {
-            Debug.Log($"tick {tick}");
             tick += Time.fixedDeltaTime;
             body.localRotation = Quaternion.Slerp(startValue, endValue, tick / randomAngleDuration);
             yield return null;

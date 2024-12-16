@@ -6,6 +6,7 @@ public abstract class Equipment : MonoBehaviour
     [Header("General settings")]
     [SerializeField] protected float useCD;
     [SerializeField] protected bool usable = true;
+    [SerializeField] protected bool isUsing = false;
     protected WaitForSeconds cdWait;
 
     void Start()

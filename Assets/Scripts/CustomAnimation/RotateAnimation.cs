@@ -16,7 +16,9 @@ public class RotateAnimation : CustomAnimation
         while (tick < duration)
         {
             tick += Time.deltaTime;
-            target.localRotation = Quaternion.Slerp(startValue, endValue, tick / duration);
+
+            // only rotate when angle is different from zero to make empty animation a delay
+            if (Mathf.Abs(angle) > Mathf.Epsilon) target.localRotation = Quaternion.Slerp(startValue, endValue, tick / duration);
             yield return null;
         }
     }

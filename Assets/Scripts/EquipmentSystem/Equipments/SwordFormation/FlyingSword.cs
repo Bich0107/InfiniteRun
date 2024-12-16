@@ -15,6 +15,8 @@ public class FlyingSword : MonoBehaviour
     [SerializeField] Transform target;
     [Header("Idle state settings")]
     [Header("Find target state settings")]
+    [SerializeField] Detector detector;
+    [SerializeField] float detectTime;
     [Header("Aim state settings")]
     [SerializeField] float aimRotateSpeed;
     [SerializeField] float aimDuration;
@@ -29,27 +31,17 @@ public class FlyingSword : MonoBehaviour
     [SerializeField] Vector3 basePos;
     [SerializeField] float stopDistance;
     [Tooltip("Sword will rotate this angle randomly on y or z axis before returning")]
-    [SerializeField] float randomRotateAngle;
+    [SerializeField] float randomAngle = 60f;
     [SerializeField] float returnRotateSpeed;
     [SerializeField] float returnDuration;
+
+    public bool AutoAttack = false;
 
     void Start()
     {
         ChangeState(FlyingSwordState.Idle);
         basePos = positionBody.localPosition;
         baseRotation = rotationBody.localRotation;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            ChangeState(FlyingSwordState.Aim);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ChangeState(FlyingSwordState.Attack);
-        }
     }
 
     #region State processes
@@ -60,6 +52,16 @@ public class FlyingSword : MonoBehaviour
             ChangeState(FlyingSwordState.Aim);
             return;
         }
+
+        StartCoroutine(CR_FindTarget());
+    }
+
+    IEnumerator CR_FindTarget()
+    {
+        detector.SetActiveStatus(true);
+        yield return new WaitForSeconds(detectTime);
+        target = detector.GetTarget().transform;
+        ChangeState(FlyingSwordState.Aim);
     }
 
     void StateProcess_Aim()
@@ -71,7 +73,7 @@ public class FlyingSword : MonoBehaviour
         }
 
         rotater.SetRotateSpeed(aimRotateSpeed);
-        rotater.SetRandomAngle(0f);
+        rotater.SetRandomAngle(0f); // set to 0 to make it not rotate when aiming
         rotater.SetTarget(target);
 
         delayCoroutine = StartCoroutine(CR_Delay(aimDuration, () => ChangeState(FlyingSwordState.Attack)));
@@ -99,10 +101,16 @@ public class FlyingSword : MonoBehaviour
     void StateProcess_Return()
     {
         rotater.SetRotateSpeed(returnRotateSpeed);
-        rotater.SetRandomAngle(60f);
+        rotater.SetRandomAngle(randomAngle);
         rotater.SetTarget(baseTrans);
 
-        StartCoroutine(CR_ReturnToBaseTransform(() => ChangeState(FlyingSwordState.Idle)));
+        StartCoroutine(CR_ReturnToBaseTransform(() =>
+        {
+            if (AutoAttack)
+                ChangeState(FlyingSwordState.FindTarget);
+            else
+                ChangeState(FlyingSwordState.Idle);
+        }));
     }
 
     IEnumerator CR_ReturnToBaseTransform(Action _endAction)
@@ -143,6 +151,7 @@ public class FlyingSword : MonoBehaviour
             case FlyingSwordState.Idle:
                 break;
             case FlyingSwordState.FindTarget:
+                StateProcess_FindTarget();
                 break;
             case FlyingSwordState.Aim:
                 StateProcess_Aim();
@@ -163,4 +172,13 @@ public class FlyingSword : MonoBehaviour
         _endAction?.Invoke();
     }
     #endregion
+
+    public void Stop()
+    {
+        AutoAttack = false;
+
+        if (currentState == FlyingSwordState.Idle || currentState == FlyingSwordState.Return) return;
+
+        ChangeState(FlyingSwordState.Return);
+    }
 }

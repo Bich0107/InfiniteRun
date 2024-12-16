@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] PlayerMovement movement;
+    [SerializeField] EquipmentHolder equipmentHolder;
     Touch touch;
     Vector2 touchPos;
     Vector2 releasedPos;
@@ -12,6 +13,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GetTouchInfo();
+        TestOnEditor();
+    }
+
+    void TestOnEditor()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            equipmentHolder.UseEquipment();
+        }
+#endif
     }
 
     void GetTouchInfo()
